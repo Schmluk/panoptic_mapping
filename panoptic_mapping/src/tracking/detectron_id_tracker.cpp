@@ -60,7 +60,7 @@ Submap* DetectronIDTracker::allocateSubmap(int input_id,
   LabelEntry label;
   const int class_id = it->second.category_id;
   if (globals_->labelHandler()->segmentationIdExists(class_id)) {
-    label = globals_->labelHandler()->getLabelEntry(input_id);
+    label = globals_->labelHandler()->getLabelEntry(class_id);  // Used to be class_id
   }
   if (it->second.is_thing) {
     label.label = PanopticLabel::kInstance;

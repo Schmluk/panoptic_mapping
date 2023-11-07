@@ -110,7 +110,7 @@ void ClassProjectiveIntegrator::updateBlock(
     }
   }
   if (was_updated) {
-    block.setUpdatedAll();
+    block.updated().set();
   }
 }
 

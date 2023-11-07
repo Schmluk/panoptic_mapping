@@ -280,9 +280,10 @@ void SubmapVisualizer::generateClassificationMesh(Submap* submap,
     TsdfBlock& block = submap->getTsdfLayerPtr()->getBlockByIndex(index);
     // NOTE(schmluk): we abuse the esdf flag here to mesh only updated blocks.
     // TODO(schmluk): clean this up (maybe custom bit or so).
-    tsdf_layer.getBlockByIndex(index).setUpdated(
-        voxblox::Update::kMesh, block.updated(voxblox::Update::kEsdf));
-    block.setUpdated(voxblox::Update::kEsdf, false);
+    tsdf_layer.getBlockByIndex(index)
+        .updated()[voxblox::Update::Status::kMesh] =
+        block.updated()[voxblox::Update::kEsdf];
+    block.updated()[voxblox::Update::kEsdf] = false;
   }
   tsdf_layer.getAllUpdatedBlocks(voxblox::Update::kMesh, &updated_blocks);
 

@@ -157,7 +157,7 @@ void ProjectiveIntegrator::updateBlock(Submap* submap,
     }
   }
   if (was_updated) {
-    block.setUpdatedAll();
+    block.updated().set();
   }
 }
 

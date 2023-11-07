@@ -65,7 +65,7 @@ void LayerManipulator::applyClassificationLayer(
       // This block does not contain useful data anymore.
       tsdf_layer->removeBlock(block_index);
     } else if (was_updated) {
-      tsdf_block.setUpdatedAll();
+      tsdf_block.updated().set();
     }
   }
 }
@@ -87,7 +87,7 @@ void LayerManipulator::mergeSubmapAintoB(const Submap& A, Submap* B) const {
   for (const auto& block_index : block_indices) {
     TsdfBlock::Ptr tsdf_block_B =
         B->getTsdfLayerPtr()->allocateBlockPtrByIndex(block_index);
-    tsdf_block_B->setUpdatedAll();
+    tsdf_block_B->updated().set();
     const TsdfBlock::ConstPtr tsdf_block_A =
         A.getTsdfLayer().getBlockPtrByIndex(block_index);
     ClassBlock::ConstPtr class_block_A;

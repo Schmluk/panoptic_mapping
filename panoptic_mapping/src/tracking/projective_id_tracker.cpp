@@ -61,7 +61,7 @@ void ProjectiveIDTracker::processInput(SubmapCollection* submaps,
     vis_timer = std::make_unique<Timer>("visualization/tracking");
     Timer timer("visualization/tracking/input_image");
     input_vis = renderer_.colorIdImage(input->idImage());
-    vis_timer->Pause();
+    // vis_timer->Pause();
   }
 
   // Render all submaps.
@@ -77,7 +77,7 @@ void ProjectiveIDTracker::processInput(SubmapCollection* submaps,
   int n_matched = 0;
   int n_new = 0;
   Timer alloc_timer("tracking/allocate_submaps");
-  alloc_timer.Pause();
+  // alloc_timer.Pause();
   for (const int input_id : tracking_data.getInputIDs()) {
     int submap_id;
     bool matched = false;
@@ -134,7 +134,7 @@ void ProjectiveIDTracker::processInput(SubmapCollection* submaps,
     }
 
     // Allocate new submap if necessary and store tracking info.
-    alloc_timer.Unpause();
+    // alloc_timer.Unpause();
     bool allocate_new_submap = tracking_data.getNumberOfInputPixels(input_id) >=
                                config_.min_allocation_size;
     if (matched) {
@@ -153,7 +153,7 @@ void ProjectiveIDTracker::processInput(SubmapCollection* submaps,
       // Ignore these.
       input_to_output[input_id] = -1;
     }
-    alloc_timer.Pause();
+    // alloc_timer.Pause();
 
     // Logging.
     if (config_.verbosity >= 3) {
@@ -183,7 +183,7 @@ void ProjectiveIDTracker::processInput(SubmapCollection* submaps,
   }
 
   // Allocate free space map if required.
-  alloc_timer.Unpause();
+  // alloc_timer.Unpause();
   freespace_allocator_->allocateSubmap(submaps, input);
   alloc_timer.Stop();
 
@@ -200,7 +200,7 @@ void ProjectiveIDTracker::processInput(SubmapCollection* submaps,
 
   // Publish Visualization if requested.
   if (visualizationIsOn()) {
-    vis_timer->Unpause();
+    // vis_timer->Unpause();
     Timer timer("visualization/tracking/rendered");
     if (config_.use_approximate_rendering) {
       rendered_vis_ = renderer_.colorIdImage(

@@ -118,8 +118,7 @@ void MeshIntegrator::generateMeshBlocksFunction(
     const voxblox::BlockIndex& block_idx = tsdf_blocks[list_idx];
     const bool success = updateMeshForBlock(block_idx);
     if (clear_updated_flag && success) {
-      tsdf_layer_->getBlockPtrByIndex(block_idx)->setUpdated(
-          voxblox::Update::Status::kMesh, false);
+      tsdf_layer_->getBlockPtrByIndex(block_idx)->updated()[voxblox::Update::Status::kMesh] = false;
     }
   }
 }
