@@ -222,23 +222,20 @@ bool InputSynchronizer::allocateDataInQueue(const ros::Time& timestamp) {
   InputSynchronizerData& data = *data_queue_.back();
 
   // Check transform.
-  Transformation T_M_C;
-  if (!used_sensor_frame_name_.empty()) {
-    std::cout << "Getting transform for " << timestamp << " from "
-              << config_.global_frame_name << " to " << used_sensor_frame_name_
-              << std::endl;
-    if (!lookupTransform(timestamp, config_.global_frame_name,
-                         used_sensor_frame_name_, &T_M_C)) {
-      data.valid = false;
-      return false;
-    }
-  }
+  // Transformation T_M_C;
+  // if (!used_sensor_frame_name_.empty()) {
+  //   if (!lookupTransform(timestamp, config_.global_frame_name,
+  //                        used_sensor_frame_name_, &T_M_C)) {
+  //     data.valid = false;
+  //     return false;
+  //   }
+  // }
 
   // Allocate new data.
   data.data = std::make_shared<InputData>();
   data.data->setTimeStamp(timestamp.toSec());
-  data.data->setT_M_C(T_M_C);
-  data.data->setFrameName(used_sensor_frame_name_);
+  // data.data->setT_M_C(T_M_C);
+  // data.data->setFrameName(used_sensor_frame_name_);
   data.timestamp = timestamp;
   return true;
 }
@@ -264,28 +261,28 @@ std::shared_ptr<InputData> InputSynchronizer::getInputData() {
               return lhs->timestamp < rhs->timestamp;
             });
   for (size_t i = 0; i < data_queue_.size(); ++i) {
-    if (data_queue_[i]->ready) {
-    //   // In case the sensor frame name is taken from the depth message check it
-    //   // was written. This only happens for the first message.
-    //   if (data_queue_[i]->data->sensorFrameName().empty()) {
-    //     Transformation T_M_C;
-    //     std::cout << "Looking up transfrom from getInputData(): " << i << ", "
-    //               << data_queue_[i]->timestamp << std::endl;
-    //     if (!lookupTransform(data_queue_[i]->timestamp,
-    //                          config_.global_frame_name, used_sensor_frame_name_,
-    //                          &T_M_C)) {
-    //       return result;
-    //     }
-    //     data_queue_[i]->data->setT_M_C(T_M_C);
-    //     data_queue_[i]->data->setFrameName(used_sensor_frame_name_);
-    //   }
-
-      // Get the result and erase from the queue.
-      result = data_queue_[i]->data;
-      data_queue_.erase(data_queue_.begin() + i);
-      oldest_time_ = data_queue_.front()->timestamp;
-      break;
+    if (!data_queue_[i]->ready) {
+      continue;
     }
+    // In case the sensor frame name is taken from the depth message check it
+    // was written. This only happens for the first message.
+    if (data_queue_[i]->data->sensorFrameName().empty()) {
+      Transformation T_M_C;
+      std::cout << "Looking up transfrom from getInputData(): " << i << ", "
+                << data_queue_[i]->timestamp << std::endl;
+      if (!lookupTransform(data_queue_[i]->timestamp, config_.global_frame_name,
+                           used_sensor_frame_name_, &T_M_C)) {
+        return result;
+      }
+      data_queue_[i]->data->setT_M_C(T_M_C);
+      data_queue_[i]->data->setFrameName(used_sensor_frame_name_);
+    }
+
+    // Get the result and erase from the queue.
+    result = data_queue_[i]->data;
+    data_queue_.erase(data_queue_.begin() + i);
+    oldest_time_ = data_queue_.front()->timestamp;
+    break;
   }
 
   // Check whether there are other ready data points.
