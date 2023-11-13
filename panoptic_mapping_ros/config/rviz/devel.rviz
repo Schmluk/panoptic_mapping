@@ -24,7 +24,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: FreeSpaceTsdf
+    SyncSource: Input
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -79,23 +79,14 @@ Visualization Manager:
           Value: true
           Visible:
             0_Bla: true
-            106_Bla: true
-            111_Bla: true
-            124_Bla: true
-            126_Bla: true
-            127_Bla: true
-            129_Bla: true
-            143_Bla: true
-            148_Bla: true
-            155_Bla: true
-            158_Bla: true
+            11_Bla: true
+            1_Bla: true
+            24_Bla: true
             2_Bla: true
             3_Bla: true
-            62_Bla: true
-            65_Bla: true
-            86_Bla: true
-            95_Bla: true
-            96_Bla: true
+            4_Bla: true
+            5_Bla: true
+            7_Bla: true
             Value: true
         - Alpha: 0.30000001192092896
           Autocompute Intensity Bounds: true
@@ -231,7 +222,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.676332473754883
+      Distance: 14.892651557922363
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -239,15 +230,15 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -14.559416770935059
-        Y: 25.087974548339844
-        Z: 7.151745319366455
+        X: -12.115276336669922
+        Y: -1.3559527397155762
+        Z: 8.206555366516113
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.1153979301452637
+      Pitch: 1.1103979349136353
       Target Frame: <Fixed Frame>
       Yaw: 3.1535842418670654
     Saved: ~
@@ -276,4 +267,4 @@ Window Geometry:
     collapsed: false
   Width: 2501
   X: -32
-  Y: -32
+  Y: -29

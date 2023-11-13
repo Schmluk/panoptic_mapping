@@ -224,6 +224,9 @@ bool InputSynchronizer::allocateDataInQueue(const ros::Time& timestamp) {
   // Check transform.
   Transformation T_M_C;
   if (!used_sensor_frame_name_.empty()) {
+    std::cout << "Getting transform for " << timestamp << " from "
+              << config_.global_frame_name << " to " << used_sensor_frame_name_
+              << std::endl;
     if (!lookupTransform(timestamp, config_.global_frame_name,
                          used_sensor_frame_name_, &T_M_C)) {
       data.valid = false;
@@ -262,18 +265,20 @@ std::shared_ptr<InputData> InputSynchronizer::getInputData() {
             });
   for (size_t i = 0; i < data_queue_.size(); ++i) {
     if (data_queue_[i]->ready) {
-      // In case the sensor frame name is taken from the depth message check it
-      // was written. This only happens for the first message.
-      if (data_queue_[i]->data->sensorFrameName().empty()) {
-        Transformation T_M_C;
-        if (!lookupTransform(data_queue_[i]->timestamp,
-                             config_.global_frame_name, used_sensor_frame_name_,
-                             &T_M_C)) {
-          return result;
-        }
-        data_queue_[i]->data->setT_M_C(T_M_C);
-        data_queue_[i]->data->setFrameName(used_sensor_frame_name_);
-      }
+    //   // In case the sensor frame name is taken from the depth message check it
+    //   // was written. This only happens for the first message.
+    //   if (data_queue_[i]->data->sensorFrameName().empty()) {
+    //     Transformation T_M_C;
+    //     std::cout << "Looking up transfrom from getInputData(): " << i << ", "
+    //               << data_queue_[i]->timestamp << std::endl;
+    //     if (!lookupTransform(data_queue_[i]->timestamp,
+    //                          config_.global_frame_name, used_sensor_frame_name_,
+    //                          &T_M_C)) {
+    //       return result;
+    //     }
+    //     data_queue_[i]->data->setT_M_C(T_M_C);
+    //     data_queue_[i]->data->setFrameName(used_sensor_frame_name_);
+    //   }
 
       // Get the result and erase from the queue.
       result = data_queue_[i]->data;

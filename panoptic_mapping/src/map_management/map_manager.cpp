@@ -87,7 +87,7 @@ void MapManager::pruneActiveBlocks(SubmapCollection* submaps) {
     if (submap.getTsdfLayer().getNumberOfAllocatedBlocks() == 0) {
       submaps_to_remove.emplace_back(submap.getID());
       if (config_.verbosity >= 4) {
-        info << "Removed submap!";
+        info << "\nRemoved submap!";
       }
     }
   }

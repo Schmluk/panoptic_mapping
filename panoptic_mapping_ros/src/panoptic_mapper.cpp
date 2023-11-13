@@ -54,6 +54,9 @@ void PanopticMapper::Config::setupParamsAndPrinting() {
   setupParam("save_map_path_when_finished", &save_map_path_when_finished);
   setupParam("display_config_units", &display_config_units);
   setupParam("indicate_default_values", &indicate_default_values);
+  setupParam("evaluate", &evaluate);
+  setupParam("output_dir", &output_dir);
+  setupParam("save_every_n_frames", &save_every_n_frames);
 }
 
 PanopticMapper::PanopticMapper(const ros::NodeHandle& nh,
@@ -232,10 +235,16 @@ void PanopticMapper::inputCallback(const ros::TimerEvent&) {
       // No more frames, finish up.
       LOG_IF(INFO, config_.verbosity >= 1)
           << "No more frames received for 3 seconds, shutting down.";
-      finishMapping();
-      if (!config_.save_map_path_when_finished.empty()) {
-        saveMap(config_.save_map_path_when_finished);
-      }
+      // TMP: Disabled for eval.
+      // finishMapping();
+      // if (!config_.save_map_path_when_finished.empty()) {
+      // saveMap(config_.save_map_path_when_finished);
+      // }
+      std::stringstream ss;
+      ss << config_.output_dir << "/maps/" << std::setw(5) << std::setfill('0')
+         << num_maps_saved_++;
+      saveMap(ss.str());
+      LOG(INFO) << "Saved map to '" << ss.str() << "'.";
       LOG_IF(INFO, config_.verbosity >= 1) << "Finished.";
       ros::shutdown();
     }
@@ -314,6 +323,19 @@ void PanopticMapper::processInput(InputData* input) {
   previous_frame_time_ = ros::WallTime::now();
   LOG_IF(INFO, config_.verbosity >= 2) << info.str();
   LOG_IF(INFO, config_.print_timing_interval < 0.0) << "\n" << Timing::Print();
+
+  // TMP for eval.
+  if (config_.evaluate) {
+    num_frames_processed_++;
+    if (num_frames_processed_ >= config_.save_every_n_frames) {
+      num_frames_processed_ = 0;
+      std::stringstream ss;
+      ss << config_.output_dir << "/maps/" << std::setw(5) << std::setfill('0')
+         << num_maps_saved_++;
+      saveMap(ss.str());
+      LOG(INFO) << "Saved map to '" << ss.str() << "'.";
+    }
+  }
 }
 
 void PanopticMapper::finishMapping() {

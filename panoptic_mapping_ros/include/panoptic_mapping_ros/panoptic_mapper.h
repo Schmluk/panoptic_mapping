@@ -76,6 +76,11 @@ class PanopticMapper {
     // If true, indicate the default values when printing component configs.
     bool indicate_default_values = true;
 
+    // TMP for eval.
+    bool evaluate = false;
+    std::string output_dir = "";
+    int save_every_n_frames = 50;
+
     Config() { setConfigName("PanopticMapper"); }
 
    protected:
@@ -201,6 +206,10 @@ class PanopticMapper {
   static const std::map<std::string, std::pair<std::string, std::string>>
       default_names_and_types_;
   ros::NodeHandle defaultNh(const std::string& key) const;
+
+  // TMP for eval.
+  int num_maps_saved_ = 0;
+  int num_frames_processed_ = 0;
 };
 
 }  // namespace panoptic_mapping
